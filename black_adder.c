@@ -23,7 +23,6 @@ char * stringify(int * ints, char * string)
     {
         sprintf(string, "%s%d", string, ints[index]);
     }
-    puts("");
     return(string);
 }
 
@@ -34,7 +33,7 @@ char * to_hex(char * string)
     return(BN_bn2hex(big_num));
 }
 
-int roman(char * string)
+char * roman(char * string)
 {
     int accumulator = 0;
     char characters[7] = "MDCLXVI";
@@ -71,12 +70,14 @@ int roman(char * string)
             }
         }
     }
-    return(accumulator);
+    char * rom_num = calloc(16, 1);
+    snprintf(rom_num, 15, "%d%c", accumulator, '\0');
+    rom_num[16] = '\0';
+    return(rom_num);
 }
 
 int * adder(int * a, int * b, int * c)
 {
-    //TODO: Figure out how to handle carry properly.
     int carry = 0;
     int sum = 0;
     int start = 512 - 1;
@@ -124,7 +125,7 @@ void make_array(char * string, int * num, int start)
         }
     }
 }
-
+/*
 int main(void)
 {
     //char * test = "779";
@@ -141,7 +142,7 @@ int main(void)
 
     printf("roman: %d\n", roman("MMMMCVIIII"));
     stringify(c, string);
-    printf("stringify: %s\n", string);
+    //printf("stringify: %s\n", string);
     char * bign = to_hex(string);
     printf("bignum hex: %s\n", bign);
     printf("fibo: ");
@@ -149,7 +150,7 @@ int main(void)
 
 
 }
-
+*/
 
 
 
