@@ -3,24 +3,57 @@
 #include <string.h>
 #include <ctype.h>
 
+void print_num_array(int * c)
+{
+    int index = 0;
+    for(; c[index] == 0; ++index);
+    //printf("INDEX: %d\n", index);
+    for(index; index < 512; ++index)
+    {
+        printf("%d", c[index]);
+    }
+    puts("");
+}
+
 int * adder(int * a, int * b, int * c)
 {
     //TODO: Figure out how to handle carry properly.
+    //puts("adder~");
     int carry = 0;
     int sum = 0;
     int start = 512 - 1;
-    for(int i = start; i > 500; i--)
+    for(int i = start; i > 0; i--)
     {
-        sum = (a[i] + b[i]) % 10;
-        printf("sum: %d + %d = %d\n",a[i], b[i], sum);
-        c[start] = sum + carry;
-        carry = 0;
-        carry = (a[i] + b[i]) / 10;
-        printf("~~carry: %d\n", carry);
-        printf("summed: %d\n",c[start]);
+        sum = (a[i] + b[i] + carry);
+        c[i] = sum % 10;
+        carry = sum / 10;
         --start;
     }
+
     return c;
+}
+
+void fibo(int fibno, int * a, int * b, int * c)
+{
+
+    a[511] = 1;
+    b[511] = 1;
+    fibno = fibno - 2;
+
+    while(fibno > 0)
+    {
+        c = adder(a, b, c);
+        //printf("line~\n");
+        print_num_array(c);
+        //puts("~line");
+        memcpy(a, b, 512 * sizeof(int));
+        memcpy(b, c, 512 * sizeof(int));
+        //print_num_array(c);
+        //printf("first: %d\n", c[511]);
+        //memset(c, 0, 512 * sizeof(int));
+        //printf("first: %d\n", c[511]);
+        --fibno;
+    }
 }
 
 void make_array(char * string, int * num, int start)
@@ -31,9 +64,7 @@ void make_array(char * string, int * num, int start)
     {
         if(isdigit(string[i]))
         {
-            //printf("c:%c\n", string[i]);
             num[start] = string[i] - '0';
-            //printf("d:%d\n", num[start]);
             --start;
         }
     }
@@ -47,18 +78,40 @@ int main(void)
     int c[512] = {0};
 
     int start = 512 - 1;
-    //a[start] = 5;
-    //a[start - 1] = 4;
 
+    //make_array(test, a, start);
+    //make_array("300", b, start);
+    fibo(300, a, b, c);
 
-    make_array(test, a, start);
-    make_array("300", b, start);
-    adder(a, b, c);
-
-    //printf("start: %d\n", start);
-    for(int i = start; i > 500; i--)
+    int index = 0;
+    for(; c[index] == 0; ++index);
+    printf("INDEX: %d\n", index);
+    for(index; index < 512; ++index)
     {
-        printf("%d",c[i]);
+        printf("%d", c[index]);
     }
     puts("");
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
