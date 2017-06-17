@@ -16,7 +16,7 @@
 
 int build_sock(int portno)
 {
-
+    //Constructs a socket for port number (portno) passed to function.
     char port_num[8];
     snprintf(port_num, sizeof(port_num), "%hu", portno);
 
@@ -51,17 +51,17 @@ int build_sock(int portno)
 
     freeaddrinfo(results);
 
+    //Loop until closed with signal, handling acceptable packets.
     for(;;) {
         ssize_t sent = 0;
-        int a[512] = {0};
-        int b[512] = {0};
-        int c[512] = {0};
-        char string[512] = {'\0'};
-        char buf[512]; //Large buffer in case of Liam.
+        int a[128] = {0};
+        int b[128] = {0};
+        int c[128] = {0};
+        char string[128] = {'\0'};
+        char buf[128]; //Large buffer in case of Liam.
         struct sockaddr_storage client;
         socklen_t client_sz = sizeof(client);
         char ip[INET6_ADDRSTRLEN];
-        //unsigned short port;
 
         ssize_t received = recvfrom(sd, buf, sizeof(buf), 0,
                 (struct sockaddr *)&client, &client_sz);
@@ -69,7 +69,7 @@ int build_sock(int portno)
             perror("Problem receiving");
         }
 
-        if(received == 512) {
+        if(received == 128) {
             buf[received-1] = '\0';
 
         } else {
@@ -95,7 +95,7 @@ int build_sock(int portno)
                 //Move over, eliminating the switch.
                 memmove(buf, buf + 1, strlen(buf));
                 //Zero out "c" in case it has been used.
-                memset(c, 0, sizeof(int) * 512);
+                memset(c, 0, sizeof(int) * 128);
                 //Turn string from packet to number.
                 int fnum = strtol(buf, NULL, 10);
                 //Run fibonacci function, result in "c".
@@ -145,6 +145,7 @@ int build_sock(int portno)
 
 int main(void)
 {
+    //Forks three listening ports.
     int portno = getuid();
     int first_child_check = fork();
     if(first_child_check == 0)

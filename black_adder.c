@@ -6,9 +6,10 @@
 
 void print_num_array(int * c)
 {
+    //Prints an array of integers.
     int index = 0;
     for(; c[index] == 0; ++index);
-    for(; index < 512; ++index)
+    for(; index < 128; ++index)
     {
         printf("%d", c[index]);
     }
@@ -17,9 +18,10 @@ void print_num_array(int * c)
 
 char * stringify(int * ints, char * string)
 {
+    //Turns an array into a single string.
     int index = 0;
     for(; ints[index] == 0; ++index);
-    for(; index < 512; ++index)
+    for(; index < 128; ++index)
     {
         sprintf(string, "%s%d", string, ints[index]);
     }
@@ -28,6 +30,8 @@ char * stringify(int * ints, char * string)
 
 char * to_hex(char * string)
 {
+    //Uses the bignum library (discovered via Liam by way of Ems.)
+    //to convert very large numbers to a string of their hex representation.
     BIGNUM * big_num = BN_new();
     BN_dec2bn(&big_num, string);
     return(BN_bn2hex(big_num));
@@ -35,6 +39,10 @@ char * to_hex(char * string)
 
 char * roman(char * string)
 {
+    //Translates a recieved string of Roman numerals into decimal.
+    //Letters which have no Roman value are simply passed over and ignored.
+    //All valid Roman numerals are added to the accumulator.
+    //Roman numerals must be in the older, additive style.
     int accumulator = 0;
     char characters[7] = "MDCLXVI";
     int vals[7] = {1000, 500, 100, 50, 10, 5, 1};
@@ -78,9 +86,12 @@ char * roman(char * string)
 
 int * adder(int * a, int * b, int * c)
 {
+    //Custom large number adding, which makes each digit of a large
+    //number into a separate integer in an array. Each pair is added
+    //by index, and manually carrying any remaining 'ones'.
     int carry = 0;
     int sum = 0;
-    int start = 512 - 1;
+    int start = 128 - 1;
     for(int i = start; i > 0; i--)
     {
         sum = (a[i] + b[i] + carry);
@@ -94,9 +105,9 @@ int * adder(int * a, int * b, int * c)
 
 void fibo(int fibno, int * a, int * b, int * c)
 {
-
-    a[511] = 1;
-    b[511] = 1;
+    //Fibonacci using custom large number adding.
+    a[127] = 1;
+    b[127] = 1;
     fibno = fibno - 2;
 
     while(fibno > 0)
@@ -105,8 +116,8 @@ void fibo(int fibno, int * a, int * b, int * c)
 
         //print_num_array(c);
 
-        memcpy(a, b, 512 * sizeof(int));
-        memcpy(b, c, 512 * sizeof(int));
+        memcpy(a, b, 128 * sizeof(int));
+        memcpy(b, c, 128 * sizeof(int));
 
         --fibno;
     }
@@ -114,6 +125,7 @@ void fibo(int fibno, int * a, int * b, int * c)
 
 void make_array(char * string, int * num, int start)
 {
+    //Makes an array from recieved string.
     int end = strlen(string);
     printf("end: %d\n", end);
     for(int i = end - 1; string[i] != '\0'; --i)
@@ -125,50 +137,5 @@ void make_array(char * string, int * num, int start)
         }
     }
 }
-/*
-int main(void)
-{
-    //char * test = "779";
-    int a[512] = {0};
-    int b[512] = {0};
-    int c[512] = {0};
-    char string[512] = {'\0'};
-
-    int start = 512 - 1;
-
-    //make_array(test, a, start);
-    //make_array("300", b, start);
-    fibo(300, a, b, c);
-
-    printf("roman: %d\n", roman("MMMMCVIIII"));
-    stringify(c, string);
-    //printf("stringify: %s\n", string);
-    char * bign = to_hex(string);
-    printf("bignum hex: %s\n", bign);
-    printf("fibo: ");
-    print_num_array(c);
-
-
-}
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
