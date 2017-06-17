@@ -102,8 +102,6 @@ int build_sock(int portno)
                 fibo(fnum, a, b, c);
                 //Turn result into a string.
                 stringify(c, string);
-                printf("BUF F: %s\n", buf);
-                printf("RES F: %s\n", string);
 
                 sent = sendto(sd, string, sizeof(string), 0,
                                 (struct sockaddr *)&client, client_sz);
@@ -118,7 +116,6 @@ int build_sock(int portno)
                 memmove(buf, buf + 1, strlen(buf));
                 //Convert to hex.
                 char * hex_str = to_hex(buf);
-                printf("BUF D: %s\n", hex_str);
                 sent = sendto(sd, hex_str, strlen(hex_str), 0,
                                 (struct sockaddr *)&client, client_sz);
                         if(sent < 0) {
@@ -132,7 +129,6 @@ int build_sock(int portno)
                 //Convert roman numeral to decimal.
                 
                 char * roman_str = roman(buf);
-                printf("BUF R: %s%c\n", roman_str, '\0');
                 sent = sendto(sd, roman_str, sizeof(roman_str), 0,
                                 (struct sockaddr *)&client, client_sz);
                         if(sent < 0) {
